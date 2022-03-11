@@ -1,0 +1,78 @@
+#!/usr/bin/ruby
+
+require 'uri'
+require 'net/http'
+require 'net/https'
+require 'json'
+
+ROOT = '/Users/llanda'
+USERNAME = 'lucalanda@nebulab.com'
+API_KEY = File.read("#{ROOT}/.keys/jira_scripts_token").strip
+
+def get(url, username, password)
+  uri = URI(url)
+
+  Net::HTTP.start(uri.host, uri.port,
+    :use_ssl => uri.scheme == 'https', 
+    :verify_mode => OpenSSL::SSL::VERIFY_NONE) do |http|
+
+    request = Net::HTTP::Get.new uri.request_uri
+    request.basic_auth username, password
+
+    response = http.request request
+
+    JSON.parse(response.body)
+  end
+end
+
+def normalize_title(ticket_title)
+  ticket_title
+    .downcase
+    .gsub(/\s+/, '-').gsub(/[\]\(\)|\\|\/\.,'"]/, '')
+end
+
+def branch_title(ticket_number, ticket_title)
+  "luca-landa/FWM-#{ticket_number}/#{normalize_title(ticket_title)}"
+end
+
+def create_branch(ticket_number, ticket_title)
+  title = branch_title(ticket_number, ticket_title)
+  `git checkout master; git pull; git checkout -b #{title}`
+
+  puts "branch #{title} created"
+end
+
+def create_notes_file(ticket_title)
+  ticket_title_fixed = normalize_title(ticket_title)
+  notes_file_title = "TODO_#{ticket_title_fixed}.md"
+  file_path = "/Users/llanda/Desktop/#{notes_file_title}"
+  notes_file_content = <<~CONTENT
+    # TODO
+
+    # Overtime
+
+    # Notes
+
+    # Questions
+
+    # Snippets
+  CONTENT
+
+  `echo "#{notes_file_content}" >> "#{file_path}"`
+  puts "notes file #{notes_file_title} created"
+end
+
+
+ticket_number = ARGV.first
+raise 'no ticket number given' unless ticket_number
+
+puts "processing ticket #{ticket_number}"
+
+url = "https://frameworkmarketplace.atlassian.net/rest/api/2/issue/FWM-#{ticket_number}"
+ticket_data = get(url, USERNAME, API_KEY)
+title = ticket_data['fields']['summary']
+
+`cd /Users/llanda/Projects/marketplace`
+create_branch(ticket_number, title)
+create_notes_file(title)
+
