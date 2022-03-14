@@ -1,0 +1,27 @@
+#!/usr/bin/ruby
+
+$pr_title = ARGV.first
+unless $pr_title
+  puts 'Usage: ./createpr <title> [--ready-for-review | --rfr]'
+  exit 1
+end
+
+$branch_name = `git rev-parse --abbrev-ref HEAD`
+$ready_for_review = (%w(--ready-for-review --rfr) & ARGV).any?
+
+def create_remote_branch
+  `git push --set-upstream origin #{$branch_name}`
+end
+
+def create_pr
+  ticket_code = $branch_name[/FWMD?-\d+/]
+
+  title_prefix = ticket_code ? "[#{ticket_code}]" : nil
+  title = [title_prefix, $pr_title].compact.join(' ')
+
+  `gh pr create -t "#{title}" -a @me #{$ready_for_review ? '' : '-d'}`
+end
+
+create_remote_branch
+create_pr
+puts 'Done!'
