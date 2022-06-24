@@ -1,0 +1,15 @@
+#!/bin/bash
+
+prnumber=$1
+
+if [ -z "$prnumber" ]
+  then
+    echo "No arguments supplied"
+    exit 1
+fi
+
+export app_name=framework-web-qa-pr-$prnumber
+gh pr checkout $prnumber
+export branch_name=`git rev-parse --abbrev-ref HEAD`
+
+git push -f heroku-$app_name $branch_name:main

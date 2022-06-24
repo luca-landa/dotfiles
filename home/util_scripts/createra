@@ -1,0 +1,54 @@
+#!/bin/bash
+
+prnumber=$1
+
+if [ -z "$prnumber" ]
+  then
+    echo "No arguments supplied"
+    exit 1
+fi
+
+export app_name=framework-web-qa-pr-$prnumber
+gh pr checkout $prnumber
+export branch_name=`git rev-parse --abbrev-ref HEAD`
+
+heroku create $app_name --remote heroku-$app_name --org framework
+
+heroku buildpacks:add --index 1 https://github.com/gaffneyc/heroku-buildpack-jemalloc.git --app $app_name
+heroku buildpacks:add --index 2 heroku/nodejs --app $app_name
+heroku buildpacks:add --index 3 heroku/ruby --app $app_name
+heroku buildpacks:add --index 4 https://github.com/heroku/heroku-buildpack-cli --app $app_name
+
+heroku addons:create heroku-postgresql:hobby-dev --app $app_name --name $app_name-postgresql
+heroku pg:psql --app $app_name -c "CREATE EXTENSION hstore;"
+heroku pg:psql --app $app_name -c "CREATE EXTENSION pg_trgm;"
+
+heroku addons:create heroku-redis:hobby-dev --app $app_name --name $app_name-redis --as REDIS
+heroku addons:create heroku-redis:hobby-dev --app $app_name --name $app_name-redis-cache --as REDIS_CACHE
+
+export config_keys_to_remove="HEROKU_APP_ID|"
+
+heroku config -s --app framework-web-staging > heroku-staging-config.txt
+echo "$(grep -v "HEROKU_APP_ID" heroku-staging-config.txt)" > heroku-staging-config.txt
+echo "$(grep -v "DATABASE_" heroku-staging-config.txt)" > heroku-staging-config.txt
+echo "$(grep -v "REDIS_" heroku-staging-config.txt)" > heroku-staging-config.txt
+echo "$(grep -v "SEGMENT_" heroku-staging-config.txt)" > heroku-staging-config.txt
+echo "$(grep -v "SENTRY_" heroku-staging-config.txt)" > heroku-staging-config.txt
+cat heroku-staging-config.txt | tr '\n' ' ' | xargs heroku config:set --app $app_name
+rm -f heroku-staging-config.txt
+heroku config:set --app $app_name \
+  ADMIN_EMAIL='admin@example.com' \
+  ADMIN_PASSWORD='Test123!' \
+  BASIC_AUTH_PASSWORD='framework' \
+  BASIC_AUTH_USERNAME='framework' \
+  HEROKU_APP_NAME=$app_name \
+  RAILS_MAX_THREADS=2 \
+  RELEASE_STAGE='review' \
+  TEST_USER_EMAIL='test@frame.work' \
+  TEST_USER_PASSWORD='Test123!' \
+  WEB_CONCURRENCY=1
+
+git push heroku-$app_name $branch_name:main
+
+heroku run "bin/rails db:sample stripe:create_webhook balance:create_review_app_webhooks" --app $app_name
+heroku ps:scale web=1 worker=1 --app $app_name

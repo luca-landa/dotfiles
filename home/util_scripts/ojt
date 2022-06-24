@@ -1,0 +1,12 @@
+#!/bin/bash
+
+ticketnumber=$1
+
+if [ -z "$ticketnumber" ]
+  then
+    echo "No arguments supplied"
+    exit 1
+fi
+
+open -a 'Firefox Developer Edition' "https://frameworkmarketplace.atlassian.net/browse/FWM-${ticketnumber}"
+
