@@ -109,7 +109,6 @@ alias fixup="gc --fixup"
 alias amend="gc --amend"
 alias rr="rails restart"
 alias chrome="open -a 'Google Chrome'"
-alias viewpr="gh pr view --web"
 alias vim="nvim"
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
@@ -132,3 +131,4 @@ if type rg &> /dev/null; then
   export FZF_DEFAULT_OPTS='-m --height 50% --border'
 fi
 
+export MQL_FOLDER="/Users/$USER/Library/Application Support/MetaTrader 5/Bottles/metatrader5/drive_c/Program Files/MetaTrader 5/MQL5"
