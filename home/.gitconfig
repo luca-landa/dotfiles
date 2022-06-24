@@ -1,0 +1,8 @@
+[color]
+	ui = true
+[user]
+	name = luca-landa
+	email = lucalanda@hotmail.it
+[core]
+	excludesfile = /Users/llanda/.gitignore_global
+	editor = /usr/bin/vim

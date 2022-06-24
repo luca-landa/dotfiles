@@ -2,7 +2,7 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH="/Users/llanda/.oh-my-zsh"
+export ZSH="/Users/$USER/.oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -100,6 +100,8 @@ source $ZSH/oh-my-zsh.sh
 
 ulimit -n 10240
 
+. /opt/homebrew/opt/asdf/libexec/asdf.sh
+
 export BUNDLER_EDITOR=nvim
 export EDITOR=nvim
 
@@ -120,8 +122,6 @@ export PATH="/usr/local/lib/ruby/gems/3.0.0/bin:$PATH"
 export PATH="./.git/safe/../../bin:$PATH"
 export NVM_DIR=~/.nvm
 export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
-
-source $(brew --prefix nvm)/nvm.sh
 
 eval $(thefuck --alias)
 
