@@ -28,7 +28,7 @@ end
 def normalize_title(ticket_title)
   ticket_title
     .downcase
-    .gsub(/\s+/, '-').gsub(/[\]\(\)|\\|\/\.,'"]/, '')
+    .gsub(/\s+/, '-').gsub(/[\]\(\)|\\|\/\.,'"<>]/, '')
 end
 
 def branch_title(ticket_number, ticket_title)
