@@ -5,7 +5,8 @@ require 'net/http'
 require 'net/https'
 require 'json'
 
-ROOT = '/Users/llanda'
+USER = `echo $USER`.strip
+ROOT = "/Users/#{USER}"
 USERNAME = 'lucalanda@nebulab.com'
 API_KEY = File.read("#{ROOT}/.keys/jira_scripts_token").strip
 
@@ -28,7 +29,7 @@ end
 def normalize_title(ticket_title)
   ticket_title
     .downcase
-    .gsub(/\s+/, '-').gsub(/[\]\(\)|\\|\/\.,'"<>]/, '')
+    .gsub(/\s+/, '-').gsub(/[\[\]\(\)|\\|\/\.,'"<>:]/, '')
 end
 
 def branch_title(ticket_number, ticket_title)
@@ -45,7 +46,7 @@ end
 def create_notes_file(ticket_title)
   ticket_title_fixed = normalize_title(ticket_title)
   notes_file_title = "TODO_#{ticket_title_fixed}.md"
-  file_path = "/Users/llanda/Desktop/#{notes_file_title}"
+  file_path = "/Users/#{USER}/Desktop/#{notes_file_title}"
   notes_file_content = <<~CONTENT
     # TODO
 
@@ -72,7 +73,7 @@ url = "https://frameworkmarketplace.atlassian.net/rest/api/2/issue/FWM-#{ticket_
 ticket_data = get(url, USERNAME, API_KEY)
 title = ticket_data['fields']['summary']
 
-`cd /Users/llanda/Projects/marketplace`
+`cd /Users/$USER/Projects/FrameworkComputer/marketplace`
 create_branch(ticket_number, title)
 create_notes_file(title)
 
