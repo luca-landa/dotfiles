@@ -19,7 +19,7 @@ def create_pr
   title_prefix = ticket_code ? "[#{ticket_code}]" : nil
   title = [title_prefix, $pr_title].compact.join(' ')
 
-  `gh pr create -t "#{title}" -a @me #{$ready_for_review ? '' : '-d'}`
+  `gh pr create -t "#{title}" --body-file ./.github/pull_request_template.md -a @me #{$ready_for_review ? '' : '-d'} --fill`
 end
 
 create_remote_branch
