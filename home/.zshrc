@@ -105,7 +105,7 @@ ulimit -n 10240
 export BUNDLER_EDITOR=nvim
 export EDITOR=nvim
 
-alias c="code ."
+alias c="codium ."
 alias gstai="gsta --include-untracked"
 alias fixup="gc --fixup"
 alias amend="gc --amend"
