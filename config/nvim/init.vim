@@ -75,6 +75,11 @@ nnoremap gdl :diffget //3<CR>
 " clear highlighting
 nnoremap <Leader>h :noh<CR>
 
+" todo files helpers
+nnoremap <Leader>D :ClearTodoItemStatus<CR>A => DONE<ESC><CR>:noh<CR>
+nnoremap <Leader>W :ClearTodoItemStatus<CR>A => WIP<ESC>:noh<CR>
+nnoremap <Leader>U :ClearTodoItemStatus<CR>:noh<CR>0
+
 if (has('nvim'))
   let $NVIM_TUI_ENABLE_TRUE_COLOR = 1
 endif
@@ -127,6 +132,9 @@ command CloseCurrentBufferAndSwitchToPreviousOne :execute ':b#|:bd#'
 
 command GitGutterDiffMaster :execute 'let g:gitgutter_diff_base = "master" | GitGutterAll'
 command GitGutterDiffIndex :execute 'let g:gitgutter_diff_base = "" | GitGutterAll'
+
+" todo helper
+command ClearTodoItemStatus :execute ':silent! :s/\ \+=> \(DONE\|WIP\).*//g'
 
 " exclude filename matches while searching in files
 command! -bang -nargs=* Rg call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1, {'options': '--delimiter : --nth 4..'}, <bang>0)
