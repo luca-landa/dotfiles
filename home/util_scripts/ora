@@ -1,11 +1,45 @@
-#!/bin/bash
+#!/usr/bin/ruby
 
-prnumber=$1
+$pr_number = ARGV.first
 
-if [ -z "$prnumber" ]
-  then
-    echo "No arguments supplied"
-    exit 1
-fi
+unless $pr_number
+  puts 'Usage: ./ora <pr number> [option]'
+  exit 1
+end
 
-open -a 'Firefox Developer Edition' "https://framework-web-qa-pr-${prnumber}.herokuapp.com/"
+OPTIONS = {
+  'h' => '/',
+  '0' => '/admin/orders',
+  '1' => '/products/hdmi-expansion-card',
+  '2' => '/products/laptop-diy-12-gen-intel',
+  '3' => '/products/laptop-12-gen-intel',
+  '4' => '/products/laptop-diy-11-gen-intel',
+  '5' => '/products/laptop-11-gen-intel',
+  '6' => '/products/laptop-chromebook-12-gen-intel',
+  '7' => '/marketplace/expansion-cards',
+  '8' => '/marketplace/laptops'
+}.freeze
+
+options_prompt = <<~PROMPT
+  Input your choice:
+  #{
+    OPTIONS.map do |key, value|
+      "#{key}) #{value}"
+    end.join("\n")
+  }
+
+PROMPT
+
+puts options_prompt
+input = nil
+loop do
+  input = STDIN.getc
+  input = 'h' if input == "\n"
+  break if OPTIONS.key?(input)
+
+  puts 'Invalid choice'
+end
+
+url = "https://framework-web-qa-pr-#{$pr_number}.herokuapp.com#{OPTIONS[input]}"
+puts "Opening #{url}"
+`open -a 'Firefox Developer Edition' "#{url}"`
