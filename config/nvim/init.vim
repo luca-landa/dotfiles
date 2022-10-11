@@ -5,9 +5,11 @@ Plug 'nvim-telescope/telescope.nvim'
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-fugitive'
+Plug 'kyazdani42/nvim-web-devicons'
+Plug 'pwntester/octo.nvim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'} " syntax highlighting
-Plug 'neovim/nvim-lspconfig' " lsp config
 Plug 'williamboman/nvim-lsp-installer' " lsp installer
+Plug 'neovim/nvim-lspconfig' " lsp config
 Plug 'tomtom/tcomment_vim'
 Plug 'Townk/vim-autoclose'
 " Plug 'autozimu/LanguageClient-neovim'
@@ -139,11 +141,20 @@ command ClearTodoItemStatus :execute ':silent! :s/\ \+=> \(DONE\|WIP\).*//g'
 " exclude filename matches while searching in files
 command! -bang -nargs=* Rg call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1, {'options': '--delimiter : --nth 4..'}, <bang>0)
 
+command Opr :call OctoEditCurrentPR()
+
+function OctoEditCurrentPR()
+  let prNumber = system("echo $(gh pr view --json number -t '{{.number}}')")
+  :execute "Octo pr edit " . prNumber
+endfunction
+
 lua << EOF
   local lsp_installer = require("nvim-lsp-installer")
 
   lsp_installer.on_server_ready(function(server)
       local opts = { }
-      server:setup(opts)
+      return server:setup(opts)
   end)
+
+  require"octo".setup()
 EOF
