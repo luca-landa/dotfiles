@@ -141,7 +141,13 @@ command ClearTodoItemStatus :execute ':silent! :s/\ \+=> \(DONE\|WIP\).*//g'
 " exclude filename matches while searching in files
 command! -bang -nargs=* Rg call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1, {'options': '--delimiter : --nth 4..'}, <bang>0)
 
+command Gc G commit
+command Gca G commit --amend
+command Gp G push
+command Gpf G push --force
+
 command Opr :call OctoEditCurrentPR()
+command Oc :execute ':Octo pr checks'
 
 function OctoEditCurrentPR()
   let prNumber = system("echo $(gh pr view --json number -t '{{.number}}')")
