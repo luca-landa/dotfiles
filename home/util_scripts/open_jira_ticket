@@ -9,6 +9,7 @@ USER = `echo $USER`.strip
 ROOT = "/Users/#{USER}"
 USERNAME = 'lucalanda@nebulab.com'
 API_KEY = File.read("#{ROOT}/.keys/jira_scripts_token").strip
+TICKETS_PREFIX = 'FWMD'
 
 def get(url, username, password)
   uri = URI(url)
@@ -33,7 +34,7 @@ def normalize_title(ticket_title)
 end
 
 def branch_title(ticket_number, ticket_title)
-  "luca-landa/FWM-#{ticket_number}/#{normalize_title(ticket_title)}"
+  "luca-landa/#{TICKETS_PREFIX}-#{ticket_number}/#{normalize_title(ticket_title)}"
 end
 
 def create_branch(ticket_number, ticket_title)
@@ -69,7 +70,7 @@ raise 'no ticket number given' unless ticket_number
 
 puts "processing ticket #{ticket_number}"
 
-url = "https://frameworkmarketplace.atlassian.net/rest/api/2/issue/FWM-#{ticket_number}"
+url = "https://frameworkmarketplace.atlassian.net/rest/api/2/issue/#{TICKETS_PREFIX}-#{ticket_number}"
 ticket_data = get(url, USERNAME, API_KEY)
 title = ticket_data['fields']['summary']
 

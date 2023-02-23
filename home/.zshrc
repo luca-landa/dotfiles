@@ -112,6 +112,7 @@ alias amend="gc --amend"
 alias rr="rails restart"
 alias chrome="open -a 'Google Chrome'"
 alias vim="nvim"
+alias rbtr="reset_branch_to_remote"
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$HOME/.rvm/bin:$PATH"

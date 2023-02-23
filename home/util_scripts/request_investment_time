@@ -1,0 +1,50 @@
+#!/usr/bin/ruby
+
+require 'uri'
+require 'net/http'
+require 'json'
+
+def time_input
+  input = ARGV[0]
+  if input.nil?
+    puts "Error: Time not provided. Please provide time in the format hh:mm."
+    exit(1)
+  end
+
+  unless input.match?(/^\d{1,2}:\d{2}$/)
+    puts "Error: Invalid time format. Please use the format hh:mm."
+    exit(1)
+  end
+
+  input
+end
+
+authorization_token = ENV['BOB_AUTHORIZATION_TOKEN']
+employee_id = ENV['BOB_EMPLOYEE_ID']
+
+current_date = Time.now.strftime("%Y-%m-%d")
+
+hours, minutes = time_input.split(':').map(&:to_i)
+
+url = URI("https://api.hibob.com/v1/timeoff/employees/#{employee_id}/requests")
+
+http = Net::HTTP.new(url.host, url.port)
+http.use_ssl = true
+
+request = Net::HTTP::Post.new(url)
+request["accept"] = 'application/json'
+request["content-type"] = 'application/json'
+request["Authorization"] = authorization_token
+
+request.body = {
+  requestRangeType: "hours",
+  skipManagerApproval: false,
+  policyType: "Investment Time",
+  startDate: current_date,
+  endDate: current_date,
+  hours: hours,
+  minutes: minutes
+}.to_json
+
+response = http.request(request)
+puts response.read_body
