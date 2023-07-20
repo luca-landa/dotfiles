@@ -37,7 +37,7 @@ end
 
 def create_branch(ticket_number, ticket_title)
   title = branch_title(ticket_number, ticket_title)
-  `git checkout master; git pull; git checkout -b #{title}`
+  `git checkout $(git_main_branch); git pull; git checkout -b #{title}`
 
   puts "branch #{title} created"
 end

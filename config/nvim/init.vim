@@ -13,7 +13,7 @@ Plug 'neovim/nvim-lspconfig' " lsp config
 Plug 'tomtom/tcomment_vim'
 Plug 'Townk/vim-autoclose'
 " Plug 'autozimu/LanguageClient-neovim'
-" Plug 'neoclide/coc.nvim', {'branch': 'master', 'do': 'yarn install --frozen-lockfile'} TODO remove or remove lsp
+" Plug 'neoclide/coc.nvim', {'branch': 'main', 'do': 'yarn install --frozen-lockfile'} TODO remove or remove lsp
 Plug 'vim-airline/vim-airline'
 Plug 'scrooloose/nerdtree'
 Plug 'tpope/vim-markdown'
@@ -132,7 +132,7 @@ command SyncNERDTreeWithFileOpens :execute ':au BufWinEnter * :silent NERDTreePa
 command W :execute ':silent w !sudo tee % > /dev/null' | :edit! " Add :W command to save as root (sudo write)
 command CloseCurrentBufferAndSwitchToPreviousOne :execute ':b#|:bd#' 
 
-command GitGutterDiffMaster :execute 'let g:gitgutter_diff_base = "master" | GitGutterAll'
+command GitGutterDiffMaster :execute 'let g:gitgutter_diff_base = "main" | GitGutterAll'
 command GitGutterDiffIndex :execute 'let g:gitgutter_diff_base = "" | GitGutterAll'
 
 " todo helper
