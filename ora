@@ -49,8 +49,9 @@ MODE_OPTIONS = {
 }
 
 path = PATH_OPTIONS[read_input(PATH_OPTIONS)]
-mode = MODE_OPTIONS[read_input(MODE_OPTIONS)]
+mode = read_input(MODE_OPTIONS)
 
+puts mode
 url = "https://framework-web-qa-pr-#{$pr_number}.herokuapp.com#{path}"
 if mode == 'o'
   puts "Opening #{url}"
