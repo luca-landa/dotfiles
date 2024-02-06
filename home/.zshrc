@@ -104,6 +104,8 @@ ulimit -n 10240
 
 export BUNDLER_EDITOR=nvim
 export EDITOR=nvim
+export GIT_EDITOR=nvim
+export VISUAL=nvim
 
 alias c="codium ."
 alias gstai="gsta --include-untracked"
@@ -113,6 +115,7 @@ alias rr="rails restart"
 alias chrome="open -a 'Google Chrome'"
 alias vim="nvim"
 alias rbtr="reset_branch_to_remote"
+alias by="bundle && yarn"
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$HOME/.rvm/bin:$PATH"
@@ -133,3 +136,6 @@ if type rg &> /dev/null; then
 fi
 
 export MQL_FOLDER="/Users/$USER/Library/Application Support/MetaTrader 5/Bottles/metatrader5/drive_c/Program Files/MetaTrader 5/MQL5"
+
+export BOB_AUTHORIZATION_TOKEN="5DPoW0TUDSmO5WHWIVcIUrojqh9pyaZOCHySM6Dh"
+export BOB_EMPLOYEE_ID="3042650529323811493"
