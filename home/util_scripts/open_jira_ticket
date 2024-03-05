@@ -9,7 +9,6 @@ USER = `echo $USER`.strip
 ROOT = "/Users/#{USER}".freeze
 USERNAME = 'lucalanda@nebulab.com'.freeze
 API_KEY = File.read("#{ROOT}/.keys/jira_scripts_token").strip
-TICKETS_PREFIX = 'FWMD'.freeze
 
 def get(url, username, password)
   uri = URI(url)
@@ -31,12 +30,12 @@ def normalize_title(ticket_title)
     .gsub(/\s+/, '-').gsub(/[\[\]\(\)|\\|\/\.,'"<>:\*]/, '')
 end
 
-def branch_title(ticket_number, ticket_title)
-  "luca-landa/#{TICKETS_PREFIX}-#{ticket_number}/#{normalize_title(ticket_title)}"
+def branch_title(ticket_code, ticket_title)
+  "luca-landa/#{ticket_code}/#{normalize_title(ticket_title)}"
 end
 
-def create_branch(ticket_number, ticket_title)
-  title = branch_title(ticket_number, ticket_title)
+def create_branch(ticket_code, ticket_title)
+  title = branch_title(ticket_code, ticket_title)
   `git checkout $(git_main_branch); git pull; git checkout -b #{title}`
 
   puts "branch #{title} created"
@@ -45,7 +44,7 @@ end
 def create_notes_file(ticket_title)
   ticket_title_fixed = normalize_title(ticket_title)
   notes_file_title = "TODO_#{ticket_title_fixed}.md"
-  file_path = "/Users/#{USER}/Desktop/#{notes_file_title}"
+  file_path = "/Users/#{USER}/Documents/TODOs/#{notes_file_title}"
   notes_file_content = <<~CONTENT
     # TODO
 
@@ -63,16 +62,16 @@ def create_notes_file(ticket_title)
 end
 
 
-ticket_number = ARGV.first
-raise 'no ticket number given' unless ticket_number
+ticket_code = ARGV.first
+raise 'no ticket number given' unless ticket_code
 
-puts "processing ticket #{ticket_number}"
+puts "processing ticket #{ticket_code}"
 
-url = "https://frameworkmarketplace.atlassian.net/rest/api/2/issue/#{TICKETS_PREFIX}-#{ticket_number}"
+url = "https://frameworkmarketplace.atlassian.net/rest/api/2/issue/#{ticket_code}"
 ticket_data = get(url, USERNAME, API_KEY)
 title = ticket_data['fields']['summary']
 
 `cd /Users/$USER/Projects/FrameworkComputer/marketplace`
-create_branch(ticket_number, title)
+create_branch(ticket_code, title)
 create_notes_file(title)
 

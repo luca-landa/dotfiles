@@ -48,6 +48,8 @@ brew install mas
 brew install redis
 brew install shared-mime-info
 
+brew tap heroku/brew && brew install heroku
+
 brew install --cask iterm2
 brew install --cask vscodium
 brew install --cask slack
@@ -58,10 +60,6 @@ brew install --cask google-chat
 brew install --cask postman
 brew install --cask spectacle
 brew install --cask firefox-developer-edition
-
-brew tap heroku/brew && brew install heroku
-
-mas install 506189836 # Harvest
 
 apps_to_open_at_login=(Harvest iTerm Slack Spectacle)
 for app in $apps_to_open_at_login

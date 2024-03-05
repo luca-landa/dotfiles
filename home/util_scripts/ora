@@ -30,28 +30,15 @@ unless $pr_number
   exit 1
 end
 
-PATH_OPTIONS = {
-  'h' => '/',
-  '0' => '/admin/orders',
-  '1' => '/products/hdmi-expansion-card',
-  '2' => '/products/laptop-diy-13-gen-intel',
-  '3' => '/products/laptop-13-gen-intel',
-  '4' => '/products/laptop16-diy-amd-7040',
-  '5' => '/products/laptop16-amd-7040',
-  '6' => '/products/laptop-chromebook-12-gen-intel',
-  '7' => '/marketplace/expansion-cards',
-  '8' => '/marketplace/laptops'
-}.freeze
-
 MODE_OPTIONS = { 
   'o' => 'open',
   'c' => 'copy to clipboard'
 }
 
-path = PATH_OPTIONS[read_input(PATH_OPTIONS)]
-mode = MODE_OPTIONS[read_input(MODE_OPTIONS)]
+url = "https://framework-web-qa-pr-#{$pr_number}.herokuapp.com"
 
-url = "https://framework-web-qa-pr-#{$pr_number}.herokuapp.com#{path}"
+mode = read_input(MODE_OPTIONS)
+
 if mode == 'o'
   puts "Opening #{url}"
   `open -a 'Firefox Developer Edition' "#{url}"`

@@ -100,8 +100,6 @@ source $ZSH/oh-my-zsh.sh
 
 ulimit -n 10240
 
-. /opt/homebrew/opt/asdf/libexec/asdf.sh
-
 export BUNDLER_EDITOR=nvim
 export EDITOR=nvim
 export GIT_EDITOR=nvim
@@ -114,26 +112,28 @@ alias amend="gc --amend"
 alias rr="rails restart"
 alias chrome="open -a 'Google Chrome'"
 alias vim="nvim"
-alias rbtr="reset_branch_to_remote"
 alias by="bundle && yarn"
+alias todo="cd ~/Documents/TODOs; vim TODO_general.md"
+alias proj="cd ~/Projects/FrameworkComputer/marketplace"
+alias be="bundle exec"
 
-# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
-export PATH="$HOME/.rvm/bin:$PATH"
 export PATH="$HOME/util_scripts/:$PATH"
-export PATH="/usr/local/opt/postgresql@12/bin:$PATH"
-export PATH="/usr/local/sbin:$PATH"
-export PATH="/usr/local/lib/ruby/gems/3.0.0/bin:$PATH"
 export PATH="./.git/safe/../../bin:$PATH"
 export NVM_DIR=~/.nvm
 export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
-
-eval $(thefuck --alias)
+export PGGSSENCMODE="disable"
 
 # make fzf use rg for files searching
 if type rg &> /dev/null; then
   export FZF_DEFAULT_COMMAND='rg --files --hidden --glob "!/.git/**" --glob "!**spec/cassettes/**"' # include dotfiles in search and exclude unwanted trees
   export FZF_DEFAULT_OPTS='-m --height 50% --border'
 fi
+
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
+eval $(thefuck --alias)
+
+. /opt/homebrew/opt/asdf/libexec/asdf.sh
 
 export MQL_FOLDER="/Users/$USER/Library/Application Support/MetaTrader 5/Bottles/metatrader5/drive_c/Program Files/MetaTrader 5/MQL5"
 
