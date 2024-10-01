@@ -45,6 +45,7 @@ brew install fzf
 brew install ripgrep
 brew install libyaml
 brew install git
+brew install git-absorb
 brew install gh
 brew install thefuck
 brew install mas

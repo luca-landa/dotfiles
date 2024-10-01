@@ -116,6 +116,7 @@ alias by="bundle && yarn"
 alias todo="cd ~/Documents/TODOs; vim TODO_general.md"
 alias proj="cd ~/Projects/FrameworkComputer/marketplace"
 alias be="bundle exec"
+alias gar="git-absorb --and-rebase"
 
 export PATH="$HOME/util_scripts/:$PATH"
 export PATH="./.git/safe/../../bin:$PATH"
