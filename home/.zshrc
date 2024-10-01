@@ -139,3 +139,5 @@ export MQL_FOLDER="/Users/$USER/Library/Application Support/MetaTrader 5/Bottles
 
 export BOB_AUTHORIZATION_TOKEN="5DPoW0TUDSmO5WHWIVcIUrojqh9pyaZOCHySM6Dh"
 export BOB_EMPLOYEE_ID="3042650529323811493"
+
+export PATH="/opt/homebrew/opt/libpq/bin:$PATH"

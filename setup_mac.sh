@@ -6,7 +6,10 @@ POSTGRES_VERSION=14.4
 
 set -e
 
-cp -r ./home/. ~/
+ln -s ./home/.zshrc ~/.zshrc
+ln -s ./home/.vimrc ~/.vimrc
+ln -s ./home/.gitignore_global ~/.gitignore_global
+
 sudo cp ./etc/hosts /etc/hosts
 mkdir ~/.postgres
 
