@@ -1,27 +1,52 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby
 
-$pr_title = ARGV.first
-unless $pr_title
-  puts 'Usage: ./createpr <title> [--ready-for-review | --rfr]'
-  exit 1
+def prompt_user
+  loop do
+    print "Do you want to continue? (Y/N): "
+    input = STDIN.gets.chomp.strip.downcase
+
+    case input
+    when 'y'
+      puts "Continuing..."
+      break
+    when 'n'
+      puts "Exiting..."
+      exit
+    else
+      puts "Invalid input. Please enter Y or N."
+    end
+  end
 end
 
-$branch_name = `git rev-parse --abbrev-ref HEAD`
-$ready_for_review = (%w(--ready-for-review --rfr) & ARGV).any?
+def confirm_creation
+  puts "Creating PR '#{pr_title}'"
+  prompt_user
+end
 
 def create_remote_branch
   `git push --set-upstream origin #{$branch_name}`
 end
 
-def create_pr
+def pr_title
   ticket_code = $branch_name[/FWMD?-\d+/]
 
   title_prefix = ticket_code ? "[#{ticket_code}]" : nil
-  title = [title_prefix, $pr_title].compact.join(' ')
-
-  `gh pr create -t "#{title}" --body-file ./.github/pull_request_template.md -a @me #{$ready_for_review ? '' : '-d'} --fill`
+  [title_prefix, $pr_title].compact.join(' ')
 end
 
+def create_pr
+  `gh pr create -t "#{pr_title}" --body-file ./.github/pull_request_template.md -a @me #{$ready_for_review ? '' : '-d'} --fill`
+end
+
+def titleize(string)
+  string.split(/[\s_\-]+/).map(&:capitalize).join(' ')
+end
+
+$branch_name = `git rev-parse --abbrev-ref HEAD`
+$pr_title = ARGV.first || titleize($branch_name.split('/').last)
+$ready_for_review = (%w(--ready-for-review --rfr) & ARGV).any?
+
+confirm_creation
 create_remote_branch
 create_pr
 puts 'Done!'
