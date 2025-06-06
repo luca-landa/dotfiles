@@ -3,26 +3,29 @@
 require 'uri'
 require 'net/http'
 require 'json'
+require 'base64'
 
 def time_input
   input = ARGV[0]
   if input.nil?
-    puts "Error: Time not provided. Please provide time in the format hh:mm."
+    puts 'Error: Time not provided. Please provide time in the format hh:mm.'
     exit(1)
   end
 
   unless input.match?(/^\d{1,2}:\d{2}$/)
-    puts "Error: Invalid time format. Please use the format hh:mm."
+    puts 'Error: Invalid time format. Please use the format hh:mm.'
     exit(1)
   end
 
   input
 end
 
-authorization_token = ENV['BOB_AUTHORIZATION_TOKEN']
 employee_id = ENV['BOB_EMPLOYEE_ID']
+service_user_id = ENV['BOB_SERVICE_USER_ID']
+token = ENV['BOB_TOKEN']
+authorization_token = Base64.encode64("#{service_user_id}:#{token}").delete("\n")
 
-current_date = Time.now.strftime("%Y-%m-%d")
+current_date = Time.now.strftime('%Y-%m-%d')
 
 hours, minutes = time_input.split(':').map(&:to_i)
 
@@ -32,19 +35,26 @@ http = Net::HTTP.new(url.host, url.port)
 http.use_ssl = true
 
 request = Net::HTTP::Post.new(url)
-request["accept"] = 'application/json'
-request["content-type"] = 'application/json'
-request["Authorization"] = authorization_token
+request['accept'] = 'application/json'
+request['content-type'] = 'application/json'
+request['Authorization'] = "Basic #{authorization_token}"
 
 request.body = {
-  requestRangeType: "hours",
+  requestRangeType: 'hours',
   skipManagerApproval: false,
-  policyType: "Investment Time",
+  policyType: 'Investment Time',
   startDate: current_date,
   endDate: current_date,
   hours: hours,
   minutes: minutes
 }.to_json
 
+puts 'making request'
 response = http.request(request)
-puts response.read_body
+puts 'request made'
+puts response.code
+puts response.message
+puts response.class.name
+
+puts 'outputting response:'
+puts response.body

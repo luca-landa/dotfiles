@@ -138,8 +138,9 @@ eval $(thefuck --alias)
 
 export MQL_FOLDER="/Users/$USER/Library/Application Support/MetaTrader 5/Bottles/metatrader5/drive_c/Program Files/MetaTrader 5/MQL5"
 
-export BOB_AUTHORIZATION_TOKEN="5DPoW0TUDSmO5WHWIVcIUrojqh9pyaZOCHySM6Dh"
-export BOB_EMPLOYEE_ID="3042650529323811493"
+export BOB_TOKEN="<classified>"
+export BOB_EMPLOYEE_ID="<classified>"
+export BOB_SERVICE_USER_ID="<classified>"
 
 export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
 export SKIP_LINT_STAGED=1
